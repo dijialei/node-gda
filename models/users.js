@@ -8,7 +8,7 @@ const userSchema = new Schema({
     cp:Number,
     rttp: Number,
     role:String
-})
+});
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
