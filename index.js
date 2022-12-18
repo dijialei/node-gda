@@ -17,6 +17,15 @@ app.use(function (req, res, next) {
 });
 
 //增删改操作加await会出错，不加有时会读取不准确
+app.post('/updateUser', async(req,res)=>{
+    User.findByIdAndUpdate(req.body._id, req.body, function (err, docs) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Updated Object:", docs);
+        }
+    });
+});
 
 app.post('/verification', async (req, res) => {
     //console.log(req.body);
@@ -25,7 +34,12 @@ app.post('/verification', async (req, res) => {
     res.send(result[0]);
     
 });
-app.post('/addAbsence', async (req, res) => {
+app.post('/absence', async(req,res)=>{
+    let result = await Absence.find(req.body).exec();
+    res.json(result);
+});
+
+app.post('/createAbsence', async (req, res) => {
     Absence.create(req.body, (error, absence) => { console.log(error, absence) });
 });
 app.post('/check', async(req,res)=>{
