@@ -48,10 +48,7 @@ app.post('/absence', async(req,res)=>{
 
 app.post('/createAbsence', async (req, res) => {
    let result = await Absence.create(req.body);
-   res.send(result);
-    
-
-   
+   res.send(result);   
 });
 app.post('/check', async(req,res)=>{
     let result = await JourFerie.find(req.body);
@@ -60,11 +57,13 @@ app.post('/check', async(req,res)=>{
 });
 app.post('/deleteAbsence', async(req,res)=> {    
     let result= await Absence.findByIdAndDelete(req.body._id);
-    res.send(result);
-    
+    res.send(result);    
     /* let result = await Absence.find({userId:req.body.userId}).exec();
-    res.json(result); */
-    
+    res.json(result); */    
+});
+app.post('/updateAbsence',async(req,res)=>{
+    let result = await Absence.findByIdAndUpdate(req.body._id,req.body);
+    res.send(result);
 });
 
 
