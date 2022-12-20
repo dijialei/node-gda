@@ -1,5 +1,5 @@
 const express = require('express');
-const cors=require('cors');
+const cors = require('cors');
 const app = express();
 const User = require('./models/users');
 const Absence = require('./models/absences');
@@ -29,8 +29,13 @@ app.use(function (req, res, next) {
 });
 
 //增删改操作加await会出错，不加有时会读取不准确
-app.post('/updateUser', async(req,res)=>{
-    let result= await User.findByIdAndUpdate(req.body._id, req.body);
+app.post('/updateRttp', async (req, res) => {
+    let result = await User.updateMany({ rttp: req.body.rttp }, { rttp: req.body.newRttp });
+    res.send(result);
+});
+
+app.post('/updateUser', async (req, res) => {
+    let result = await User.findByIdAndUpdate(req.body._id, req.body);
     res.send(result);
 });
 
@@ -39,30 +44,30 @@ app.post('/verification', async (req, res) => {
     let result = await User.find({ email: req.body.email, password: req.body.password });
     //console.log(result);
     res.send(result[0]);
-    
+
 });
-app.post('/absence', async(req,res)=>{
+app.post('/absence', async (req, res) => {
     let result = await Absence.find(req.body).exec();
     res.json(result);
 });
 
 app.post('/createAbsence', async (req, res) => {
-   let result = await Absence.create(req.body);
-   res.send(result);   
+    let result = await Absence.create(req.body);
+    res.send(result);
 });
-app.post('/check', async(req,res)=>{
+app.post('/check', async (req, res) => {
     let result = await JourFerie.find(req.body);
-    
+
     res.send(result[0]);
 });
-app.post('/deleteAbsence', async(req,res)=> {    
-    let result= await Absence.findByIdAndDelete(req.body._id);
-    res.send(result);    
+app.post('/deleteAbsence', async (req, res) => {
+    let result = await Absence.findByIdAndDelete(req.body._id);
+    res.send(result);
     /* let result = await Absence.find({userId:req.body.userId}).exec();
-    res.json(result); */    
+    res.json(result); */
 });
-app.post('/updateAbsence',async(req,res)=>{
-    let result = await Absence.findByIdAndUpdate(req.body._id,req.body);
+app.post('/updateAbsence', async (req, res) => {
+    let result = await Absence.findByIdAndUpdate(req.body._id, req.body);
     res.send(result);
 });
 
@@ -77,35 +82,22 @@ app.get('/jourferie', async (req, res) => {
     res.json(result);
 });
 app.post('/addjourferie', async (req, res) => {
-    JourFerie.create(req.body, (error, jourferie) => { console.log(error, jourferie) });
-    let result = await JourFerie.find({});
+    let result = await JourFerie.create(req.body);
+    result = await JourFerie.find({});
     res.json(result);
 });
-app.post('/deletejourferie', async (req, res) => {    
-    JourFerie.findByIdAndDelete(req.body._id, function (err, docs) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("Deleted Object:", docs);
-        }
+app.post('/deletejourferie', async (req, res) => {
+    let result = await JourFerie.findByIdAndDelete(req.body._id);
+    result = await JourFerie.find({});
+    res.json(result);
 
-    });
-    let result = await JourFerie.find({});
-    res.json(result);
-    
 });
-app.post('/updatejourferie',async(req,res)=>{
-     JourFerie.findByIdAndUpdate(req.body._id, req.body, function (err, docs) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("Updated Object:", docs);
-        }
-    });
-    let result = await JourFerie.find({});
+app.post('/updatejourferie', async (req, res) => {
+    let result = await JourFerie.findByIdAndUpdate(req.body._id, req.body);
+    result = await JourFerie.find({});
     res.json(result);
 });
- 
+
 
 
 
